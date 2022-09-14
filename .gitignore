@@ -1,0 +1,8 @@
+/.git
+/.settings
+/resources
+/target
+/test-output
+.classpath
+.project
+pom.xml
