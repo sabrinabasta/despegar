@@ -1,25 +1,20 @@
 package com.trabajopractico1.testing.TrabajoPractico1;
 
-import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-import java.time.Duration;
 import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.AfterClass;
+
  
 
 public class DespegarTest {
@@ -35,7 +30,7 @@ public class DespegarTest {
 	By menuLocator = By.cssSelector("div[class='ac-wrapper -desktop -show sbox-ab-ls']");
 	By entradaLocator = By.cssSelector("input[placeholder='Entrada']");
 	By salidaLocator = By.cssSelector("input[placeholder='Salida']");
-	By habitacionesLocator = By.xpath("//div[@id='BACKGROUND_MESSAGE']//div[2]/input[1]"); 
+	By habitacionesLocator = By.cssSelector(" input.sbox5-3-second-input"); 
 	By fechaEntradaLocator = By.xpath("//div[@id='component-modals']//div[29]/div[1]"); 
 	By fechaSalidaLocator = By.xpath("//div[@id='component-modals']//div[2]/div[3]/div[13]/div[1]"); 
 	By btnBuscar = By.xpath("//em[contains(text(),'Buscar')]");
@@ -46,12 +41,12 @@ public class DespegarTest {
 	By alojamientoLocator = By.cssSelector("div[class='cluster-description cluster-description-top']");
 	By experienciasCloseLocator = By.cssSelector("i[class='tooltip-close eva-3-icon-close']");
 	By btnModificarLocator = By.xpath("//em[contains(text(),'Modificar')]");
+	By btnAplicarFecha = By.cssSelector("button.sbox5-3-btn.-primary.-md > em.btn-text");
 	
-	
-  @BeforeClass
+  @BeforeMethod 
   public void setUp() throws Exception {
 	  //Se crea el driver y se le hace un get a la url donde se va a realizar el test
-	  System.setProperty("webdriver.chrome.driver", "./resources/chromedriver/chromedriver.exe" );
+	  System.setProperty("webdriver.chrome.driver", "C:\\Users\\Usuario\\Documents\\Drivers\\chromedriver.exe" );
 	  driver = new ChromeDriver();
 	  driver.manage().window().maximize();
 	  driver.get("https://www.despegar.com.ar/hoteles/"); //url de la pestaña de alojamientos de despegar
@@ -71,11 +66,13 @@ public class DespegarTest {
 		  
 		  
 		  driver.findElement(iniciarSesionLocator).click();
+		  wait.until(ExpectedConditions.invisibilityOfElementLocated(iniciarSesionLocator));
 		  
 		  driver.findElement(destinoLocator).click();
 		  driver.findElement(destinoLocator).click();
+		  Thread.sleep(1000);
 		  driver.findElement(destinoLocator).clear();
-		  driver.findElement(destinoLocator).sendKeys("Córdoba ");
+		  driver.findElement(destinoLocator).sendKeys("Bariloche ");
 		  
 		  wait.until(ExpectedConditions.visibilityOfElementLocated(menuLocator));
 		  driver.findElement(destinoLocator).sendKeys(Keys.ENTER);
@@ -91,6 +88,8 @@ public class DespegarTest {
 		  
 		  wait.until(ExpectedConditions.visibilityOfElementLocated(fechaSalidaLocator));
 		  driver.findElement(fechaSalidaLocator).click();
+		  driver.findElement(btnAplicarFecha).click();
+		  
 		  
 		  wait.until(ExpectedConditions.visibilityOfElementLocated(habitacionesLocator));
 		  driver.findElement(habitacionesLocator).click();
@@ -129,7 +128,7 @@ public class DespegarTest {
 	  }
   }
 
-  @AfterClass
+  @AfterMethod
   public void tearDown() throws Exception {
 	  
 	  //Se cierra la instancia del controlador web, se cierran todas las ventanas.
