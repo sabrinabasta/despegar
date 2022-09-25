@@ -14,18 +14,21 @@ public class DespegarResultsPage {
 	@FindBy (css = "i[class='tooltip-close eva-3-icon-close']")
 	WebElement btnCloseExperiencias;
 	
-	@FindBy (css = "div[class='cluster-description cluster-description-top']")
+	@FindBy (css = "*[class='cluster-description cluster-description-top']")
 	WebElement primerAlojamiento;
 	
 	private WebDriver driver = null;
 	private String mainTab = null;
+	private WebDriverWait wait = null;
 	
 	public DespegarResultsPage(WebDriver driver) {
 		this.driver = driver;
+		this.wait =  new WebDriverWait(driver,10);
+		this.mainTab = this.driver.getWindowHandle();
 		PageFactory.initElements(driver, this);
 	}
 	
-	public  void cambioDePestaña(WebDriver driver, String mainTab) {
+	public  void cambioDePestaña() {
 		  System.out.println("Main tab: " + mainTab);
 		  Set<String> handles = driver.getWindowHandles(); //Se crea un set de strings con los identificadores de las pestañas del navegador
 		  for(String actual: handles) {
@@ -38,14 +41,13 @@ public class DespegarResultsPage {
 		  }
 	}
 	
-	public void closeExperiencias(WebDriverWait wait) {
-		wait.until(ExpectedConditions.visibilityOf(btnCloseExperiencias));
-		this.btnCloseExperiencias.click();
+	public void closeExperiencias() {
+		this.wait.until(ExpectedConditions.visibilityOf(btnCloseExperiencias));
+		this.btnCloseExperiencias.click(); 
 		
 	}
 	public DespegarAlojamientoSeleccionadoPage seleccionarAlojamiento() {
 		this.primerAlojamiento.click();
-		//primerAlojamiento.submit();
 		return new DespegarAlojamientoSeleccionadoPage(this.driver);
 	}
 }

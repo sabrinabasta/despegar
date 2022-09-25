@@ -1,7 +1,5 @@
 package pageObjects;
 
-import java.util.Set;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -13,7 +11,7 @@ public class DespegarAlojamientoSeleccionadoPage {
 	WebElement btnModificar;
 	
 	private WebDriver driver = null;
-	private String mainTab = null;
+	
 	public DespegarAlojamientoSeleccionadoPage(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);

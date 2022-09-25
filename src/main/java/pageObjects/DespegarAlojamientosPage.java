@@ -1,7 +1,6 @@
 package pageObjects;
 
-import java.time.Duration;
-
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,15 +8,17 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+
+import java.sql.Driver;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class DespegarAlojamientosPage {
-	private static final String element = null;
-
 	@FindBy(css = "input[placeholder='Ingresá una ciudad, alojamiento o punto de interés']")
 	WebElement destinoAlojamiento;
 	
-	@FindBy(css ="div[class='ac-wrapper -desktop -show sbox-ab-ls']")
+	@FindBy(css ="*[class='ac-wrapper -desktop -show sbox-ab-ls']")
 	WebElement menuAlojamiento;
 	
 	@FindBy (css = "input[placeholder='Entrada']")
@@ -29,10 +30,10 @@ public class DespegarAlojamientosPage {
 	@FindBy (css = " input.sbox5-3-second-input")
 	WebElement habitacionAlojamiento;
 	
-	@FindBy (xpath = "//*[@id='component-modals']//div[29]/div[1]")
+	@FindBy (xpath = "//*[@id='component-modals']//div[29]/div[1]") // *.sbox5-monthgrid-datenumber.sbox5-monthgrid-datenumber-29:nth-child(30) > *.sbox5-monthgrid-datenumber-number"
 	WebElement fechaEntradaAlojamiento;
 	
-	@FindBy (xpath = "//*[@id='component-modals']//div[2]/div[3]/div[13]/div[1]") //ver de acortar el locator
+	@FindBy (xpath = "//*[@id='component-modals']//div[2]/div[3]/div[13]/div[1]")
 	WebElement fechaSalidaAlojamiento;
 	
 	@FindBy (css = "button.sbox5-3-btn.-primary.-md > em.btn-text")
@@ -41,13 +42,13 @@ public class DespegarAlojamientosPage {
 	@FindBy (css = "i[class='login-incentive--close shifu-3-icon-close -eva-3-mr-md']")
 	WebElement iniciarSesion;
 	
-	@FindBy (xpath = "//em[contains(text(),'Buscar')]") //ver de cambiar a css
+	@FindBy (xpath = "//em[contains(text(),'Buscar')]") //(css = "button.sbox5-box-button-ovr.sbox5-3-btn.sbox5-button.-secondary.-icon.-lg > *.btn-text")
 	WebElement btnBuscar;
 	
-	@FindBy (xpath = "//div[@id='component-modals']//div[1]/button[2]") //buscar cambiar a css
+	@FindBy (xpath = "//*[@id='component-modals']//div[1]/button[2]") //(css = "div.sbox5-3-steppers.-md > button.steppers-icon-right.stepper__icon")
 	WebElement btnAddAdults;
 	
-	@FindBy (xpath = "//div[@id='component-modals']//div[2]/div[2]//button[2]") //buscar cambiar a css
+	@FindBy (xpath = "//*[@id='component-modals']//div[2]/div[2]//button[2]") 
 	WebElement btnAddMenors;
 	
 	@FindBy (css = "select[class='select']")
@@ -56,10 +57,17 @@ public class DespegarAlojamientosPage {
 	@FindBy (xpath = "//em[contains(text(),'Entendí')]")
 	WebElement btnCookies;
 	
+	
 	private WebDriver driver = null;
+	private WebDriverWait wait = null;
+
+	
 	public DespegarAlojamientosPage (WebDriver driver) {
 		this.driver = driver;
+		this.wait = new WebDriverWait(driver,10); 
 		PageFactory.initElements(driver, this);
+		
+		
 	}
 	
 	public boolean destinoEsVisible() {
@@ -75,41 +83,43 @@ public class DespegarAlojamientosPage {
 		this.iniciarSesion.click();
 		this.btnCookies.click();
 	}
-	public void escribirDestino(WebDriverWait wait) {
+	public void escribirDestino(String destinoText) throws InterruptedException {
+		wait.until(ExpectedConditions.invisibilityOf(iniciarSesion));
+		//this.destinoAlojamiento.click();
+		//this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS); 
 		this.destinoAlojamiento.click();
-		this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		this.destinoAlojamiento.click();
-		this.driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-		this.destinoAlojamiento.sendKeys("Bariloche ");
-		wait.until(ExpectedConditions.visibilityOf(menuAlojamiento));
+		this.driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS); //acá uso implicitwaits para que le de tiempo al menú de aparecer
+		Thread.sleep(1000); //lo activo cuando no le gusta la implicitlyWait para esperar el menú
+		this.destinoAlojamiento.sendKeys(destinoText);
+		this.wait.until(ExpectedConditions.visibilityOf(menuAlojamiento));
 		this.destinoAlojamiento.sendKeys(Keys.ENTER);
 	}
 	
-	public void seleccionarFechas( WebDriverWait wait) {
-		wait.until(ExpectedConditions.visibilityOf(entradaAlojamiento));
+	public void seleccionarFechas() {
+		this.wait.until(ExpectedConditions.visibilityOf(entradaAlojamiento));
 		this.entradaAlojamiento.click();
 		
-		wait.until(ExpectedConditions.visibilityOf(fechaEntradaAlojamiento));
+		this.wait.until(ExpectedConditions.visibilityOf(fechaEntradaAlojamiento));
 		this.fechaEntradaAlojamiento.click();
 		
-		wait.until(ExpectedConditions.visibilityOf(salidaAlojamiento));
+		this.wait.until(ExpectedConditions.visibilityOf(salidaAlojamiento));
 		this.salidaAlojamiento.click();
 		
-		wait.until(ExpectedConditions.visibilityOf(fechaSalidaAlojamiento));
+		this.wait.until(ExpectedConditions.visibilityOf(fechaSalidaAlojamiento));
 		this.fechaSalidaAlojamiento.click();
 		
 		this.btnAplicarFecha.click();
 	}
 	
-	public void seleccionarCantidadPersonas(WebDriverWait wait) {
-		wait.until(ExpectedConditions.visibilityOf(habitacionAlojamiento));
+	public void seleccionarCantidadPersonas() {
+		this.wait.until(ExpectedConditions.visibilityOf(habitacionAlojamiento));
 		this.habitacionAlojamiento.click();
 		  
-		wait.until(ExpectedConditions.visibilityOf(btnAddAdults));
+		this.wait.until(ExpectedConditions.visibilityOf(btnAddAdults));
 		this.btnAddAdults.click();
 		this.btnAddMenors.click();
 		  
-		wait.until(ExpectedConditions.visibilityOf(edadMenorSelector));
+		this.wait.until(ExpectedConditions.visibilityOf(edadMenorSelector));
 		this.edadMenorSelector.click();
 		this.edadMenorSelector.sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
 	}
@@ -117,8 +127,16 @@ public class DespegarAlojamientosPage {
 	
 	public DespegarResultsPage buscarAlojamiento() {
 		this.btnBuscar.click();
-		//btnBuscar.submit();
 		return new DespegarResultsPage(this.driver);
+	}
+	
+	public void validarBtns() {
+		List<WebElement> listaBotones = driver.findElements(By.cssSelector("ul.header-list-products > li"));
+		for (WebElement btn: listaBotones ) {
+			WebElement textElement = btn.findElement(By.xpath("//label"));
+			Assert.assertTrue(textElement.isDisplayed(), "El texto no es visible");
+			
+		}
 	}
 	
 }

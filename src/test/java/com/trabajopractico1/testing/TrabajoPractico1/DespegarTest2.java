@@ -4,8 +4,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.ITestContext;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.selenium.driver.DriverFactory;
@@ -16,37 +18,43 @@ import pageObjects.DespegarResultsPage;
 
 public class DespegarTest2 extends DriverFactory {
 	WebDriver driver = null;
+	private DespegarAlojamientosPage alojamientosPage;
 	
-	@BeforeMethod
-	public void setUp() throws Exception {
-		driver = DriverFactory.LevantarBrowser("EDGE", "https://www.despegar.com.ar/hoteles/" );
-		
+	@BeforeMethod(alwaysRun = true)
+	public void setUp(ITestContext context) throws Exception {
+		String navegadorTestSuite = context.getCurrentXmlTest().getParameter("Navegador");
+		String navegador = navegadorTestSuite != null ? navegadorTestSuite : "CHROME";
+		driver = DriverFactory.LevantarBrowser(navegador, "https://www.despegar.com.ar/hoteles/" );
+		alojamientosPage = new DespegarAlojamientosPage(driver);
 	}
 	
-	@Test(description = "Validar el resultado de la busqueda de alojamiento")
+	@DataProvider (name = "Data Provider Despegar")
+	public Object [][] dpMetodo(){
+		return new Object [][] {{"Bariloche"}, {"Misiones"}, {"Buenos Aires"}};
+	}
+	
+	@Test(groups = {"grupo1"}, dataProvider = "Data Provider Despegar", description = "Validar el resultado de la busqueda de alojamiento")
 
-	public void ValidarAlojamientoDespegar() throws Exception {
-		WebDriverWait wait = new WebDriverWait(driver,10);
-		String mainTab = driver.getWindowHandle();
+	public void ValidarAlojamientoDespegar(String destinoText) throws Exception {
 
-		DespegarAlojamientosPage alojamientosPage = new DespegarAlojamientosPage(driver);
-		//DespegarResultsPage resultsAlojamientosPage = new DespegarResultsPage(driver); 
-		//DespegarAlojamientoSeleccionadoPage alojamientoSeleccionadoPage = new DespegarAlojamientoSeleccionadoPage(driver);
+		
+		
 		
 		if (alojamientosPage.destinoEsVisible()) {
+			
 			alojamientosPage.cerrarIniciarSesionYCookies();
 			
-			alojamientosPage.escribirDestino(wait);
-			alojamientosPage.seleccionarFechas(wait);
-			alojamientosPage.seleccionarCantidadPersonas(wait);
+			alojamientosPage.escribirDestino(destinoText);
+			alojamientosPage.seleccionarFechas();
+			alojamientosPage.seleccionarCantidadPersonas();
 			
 			DespegarResultsPage resultsAlojamientosPage = alojamientosPage.buscarAlojamiento();
 			
-			resultsAlojamientosPage.closeExperiencias(wait);
+			resultsAlojamientosPage.closeExperiencias();
 			
 			DespegarAlojamientoSeleccionadoPage alojamientoSeleccionadoPage = resultsAlojamientosPage.seleccionarAlojamiento();
 			
-			resultsAlojamientosPage.cambioDePestaña(driver, mainTab);
+			resultsAlojamientosPage.cambioDePestaña();
 			
 			Assert.assertTrue(alojamientoSeleccionadoPage.botonVisible(), "El botón no está visible.");
 		}
@@ -55,8 +63,13 @@ public class DespegarTest2 extends DriverFactory {
 		}
 		
 	} 
+	 
+	@Test (groups = {"grupo1","grupo2"}, description = "Validar botones de cambio de sección")
+	public void ValidarBotonesDespegar() {
+		alojamientosPage.validarBtns();
+	}
 	
-	@AfterMethod
+	@AfterMethod(alwaysRun = true)
 	public void tearDown() throws Exception {
 		//Se cierra la instancia del controlador web, se cierran todas las ventanas.
 		DriverFactory.CloseBrowser(driver); 

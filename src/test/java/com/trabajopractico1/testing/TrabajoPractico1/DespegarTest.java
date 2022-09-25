@@ -42,6 +42,7 @@ public class DespegarTest {
 	By experienciasCloseLocator = By.cssSelector("i[class='tooltip-close eva-3-icon-close']");
 	By btnModificarLocator = By.xpath("//em[contains(text(),'Modificar')]");
 	By btnAplicarFecha = By.cssSelector("button.sbox5-3-btn.-primary.-md > em.btn-text");
+	By btnCookies = By.xpath("//em[contains(text(),'Entendí')]");
 	
   @BeforeMethod 
   public void setUp() throws Exception {
@@ -66,6 +67,7 @@ public class DespegarTest {
 		  
 		  
 		  driver.findElement(iniciarSesionLocator).click();
+		  driver.findElement(btnCookies).click();
 		  wait.until(ExpectedConditions.invisibilityOfElementLocated(iniciarSesionLocator));
 		  
 		  driver.findElement(destinoLocator).click();
