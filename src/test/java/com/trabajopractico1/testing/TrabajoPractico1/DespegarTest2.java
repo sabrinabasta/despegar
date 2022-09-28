@@ -1,8 +1,6 @@
 package com.trabajopractico1.testing.TrabajoPractico1;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterMethod;
@@ -30,7 +28,7 @@ public class DespegarTest2 extends DriverFactory {
 	
 	@DataProvider (name = "Data Provider Despegar")
 	public Object [][] dpMetodo(){
-		return new Object [][] {{"Bariloche"}, {"Misiones"}, {"Buenos Aires"}};
+		return new Object [][] {{"Bariloche"}, {"Ushuaia"}, {"Salta"}};
 	}
 	
 	@Test(groups = {"grupo1"}, dataProvider = "Data Provider Despegar", description = "Validar el resultado de la busqueda de alojamiento")
@@ -51,6 +49,7 @@ public class DespegarTest2 extends DriverFactory {
 			DespegarResultsPage resultsAlojamientosPage = alojamientosPage.buscarAlojamiento();
 			
 			resultsAlojamientosPage.closeExperiencias();
+
 			
 			DespegarAlojamientoSeleccionadoPage alojamientoSeleccionadoPage = resultsAlojamientosPage.seleccionarAlojamiento();
 			

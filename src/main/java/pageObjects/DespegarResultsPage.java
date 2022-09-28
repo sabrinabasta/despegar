@@ -41,6 +41,7 @@ public class DespegarResultsPage {
 		  }
 	}
 	
+	
 	public void closeExperiencias() {
 		this.wait.until(ExpectedConditions.visibilityOf(btnCloseExperiencias));
 		this.btnCloseExperiencias.click(); 

@@ -10,15 +10,14 @@ public class DespegarAlojamientoSeleccionadoPage {
 	@FindBy (xpath = "//em[contains(text(),'Modificar')]")
 	WebElement btnModificar;
 	
-	private WebDriver driver = null;
 	
 	public DespegarAlojamientoSeleccionadoPage(WebDriver driver) {
-		this.driver = driver;
 		PageFactory.initElements(driver, this);
 	}
 	
 	public boolean botonVisible() {
 		return this.btnModificar.isDisplayed();
+		
 	}	
 	
 

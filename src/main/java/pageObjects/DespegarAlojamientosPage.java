@@ -10,7 +10,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import java.sql.Driver;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -30,8 +29,8 @@ public class DespegarAlojamientosPage {
 	@FindBy (css = " input.sbox5-3-second-input")
 	WebElement habitacionAlojamiento;
 	
-	@FindBy (xpath = "//*[@id='component-modals']//div[29]/div[1]") // *.sbox5-monthgrid-datenumber.sbox5-monthgrid-datenumber-29:nth-child(30) > *.sbox5-monthgrid-datenumber-number"
-	WebElement fechaEntradaAlojamiento;
+	@FindBy (css = "*.sbox5-monthgrid-datenumber.sbox5-monthgrid-datenumber-29:nth-child(30) > *.sbox5-monthgrid-datenumber-number") // xpath = "//*[@id='component-modals']//div[29]/div[1]"
+	WebElement fechaEntradaAlojamiento; 
 	
 	@FindBy (xpath = "//*[@id='component-modals']//div[2]/div[3]/div[13]/div[1]")
 	WebElement fechaSalidaAlojamiento;
@@ -45,8 +44,8 @@ public class DespegarAlojamientosPage {
 	@FindBy (xpath = "//em[contains(text(),'Buscar')]") //(css = "button.sbox5-box-button-ovr.sbox5-3-btn.sbox5-button.-secondary.-icon.-lg > *.btn-text")
 	WebElement btnBuscar;
 	
-	@FindBy (xpath = "//*[@id='component-modals']//div[1]/button[2]") //(css = "div.sbox5-3-steppers.-md > button.steppers-icon-right.stepper__icon")
-	WebElement btnAddAdults;
+	@FindBy (css = "*.sbox5-3-steppers.-md > button.steppers-icon-right.stepper__icon") //xpath = "//*[@id='component-modals']//div[1]/button[2]"
+	WebElement btnAddAdults; 
 	
 	@FindBy (xpath = "//*[@id='component-modals']//div[2]/div[2]//button[2]") 
 	WebElement btnAddMenors;
@@ -84,9 +83,7 @@ public class DespegarAlojamientosPage {
 		this.btnCookies.click();
 	}
 	public void escribirDestino(String destinoText) throws InterruptedException {
-		wait.until(ExpectedConditions.invisibilityOf(iniciarSesion));
-		//this.destinoAlojamiento.click();
-		//this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS); 
+		wait.until(ExpectedConditions.invisibilityOf(iniciarSesion)); 
 		this.destinoAlojamiento.click();
 		this.driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS); //acá uso implicitwaits para que le de tiempo al menú de aparecer
 		Thread.sleep(1000); //lo activo cuando no le gusta la implicitlyWait para esperar el menú
@@ -132,11 +129,13 @@ public class DespegarAlojamientosPage {
 	
 	public void validarBtns() {
 		List<WebElement> listaBotones = driver.findElements(By.cssSelector("ul.header-list-products > li"));
-		for (WebElement btn: listaBotones ) {
+		System.out.println("Validando que los botones que redirigen a cada sección tengan el texto visible...");
+		for  (WebElement btn: listaBotones ) {
 			WebElement textElement = btn.findElement(By.xpath("//label"));
 			Assert.assertTrue(textElement.isDisplayed(), "El texto no es visible");
 			
 		}
+		
 	}
 	
 }

@@ -5,8 +5,8 @@
   <test thread-count="5" name="Test">
   	<groups>
   		<run>
-  			<include name="grupo2"/>
-  						
+  			<include name="grupo1"/>
+  			<exclude name="grupo2"></exclude>			
   		</run>
   	</groups>
     <classes>
